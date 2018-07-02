@@ -2,8 +2,14 @@ QT -= gui
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
-QMAKE_CXXFLAGS+=/Zi
-QMAKE_LFLAGS+= /INCREMENTAL:NO /Debug
+CONFIG += force_debug_info
+
+win32-msvc* {
+  QMAKE_CXXFLAGS_WARN_ON -= -W3
+  QMAKE_CXXFLAGS_WARN_ON += -W4 -w44640
+  QMAKE_CXXFLAGS_RELEASE += -O2 -MD
+  QMAKE_LFLAGS_RELEASE = /INCREMENTAL:NO /DEBUG /MAP /OPT:REF
+}
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
