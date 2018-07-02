@@ -40,12 +40,9 @@ build_script:
 
 after_build:
   - if [%CONFIGURATION%]==[release] (
-    sentryTest\%CONFIGURATION%\sentryTest.exe
-    windeployqt sentryTest\%CONFIGURATION%\qmaketravis.exe --dir distrib &&
-    cp sentryTest\%CONFIGURATION%\qmaketravis.exe distrib &&
+    %CONFIGURATION%\sentryTest.exe
+    windeployqt %CONFIGURATION%\sentryTest.exe --dir distrib &&
+    cp %CONFIGURATION%\sentryTest.exe distrib &&
     7z a -y %CONFIGURATION%-distrib.zip distrib &&
     appveyor PushArtifact %CONFIGURATION%-distrib.zip
     )
-
-test_script:
-  - '%APPVEYOR_BUILD_FOLDER%-build\tests\%CONFIGURATION%\tests.exe'
