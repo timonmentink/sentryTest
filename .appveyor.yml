@@ -42,6 +42,7 @@ after_build:
   - if [%CONFIGURATION%]==[release] (
     windeployqt %CONFIGURATION%\sentryTest.exe --dir distrib &&
     cp %CONFIGURATION%\sentryTest.exe distrib &&
+    cp %CONFIGURATION%\sentryTest.pdb distrib &&
     7z a -y %CONFIGURATION%-distrib.zip distrib &&
     appveyor PushArtifact %CONFIGURATION%-distrib.zip
     )
