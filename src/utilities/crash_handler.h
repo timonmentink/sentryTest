@@ -1,6 +1,7 @@
 #ifndef CRASH_HANDLER_H
 #define CRASH_HANDLER_H
 #include <QString>
+#include <Qurl>
 #include <external/breakpad/src/client/windows/handler/exception_handler.h>
 
 class Breakpad {
@@ -23,6 +24,8 @@ class Breakpad {
 
   // Any other public methods.
   void init(const QString& reportPath);
+  void setUploadUrl(const QString &uploadUrl) {m_uploadUrl = uploadUrl;}
+  void sendDumps();
 
  protected:
   Breakpad() {
@@ -35,7 +38,8 @@ class Breakpad {
 
 private:
   google_breakpad::ExceptionHandler* m_exceptionHandler = nullptr;
- // And any other protected methods.
+  QString m_reportPath;
+  QString m_uploadUrl;
 };
 
 #endif //CRASH_HANDLER_H
