@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     Breakpad::Instance().setUploadUrl("https://sentry.io/api/1235621/minidump?sentry_key=08530653215141a8b0a1fe94c19ac16c");
     Breakpad::Instance().sendDumps();
 
-    //crash();
+    crash();
 
 
     return a.exec();
