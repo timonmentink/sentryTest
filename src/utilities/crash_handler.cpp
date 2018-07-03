@@ -27,8 +27,6 @@ void Breakpad::init(const QString &reportPath)
 
 void Breakpad::sendDumps()
 {
-
-
     if(!m_reportPath.isEmpty())
     {
         QDir dumpDir(m_reportPath);
@@ -57,7 +55,7 @@ void Breakpad::sendDumps()
                         &returnCode);
             if (returnCode == 200)
             {
-                QFile::remove((QString(m_reportPath + "/" + dmpFileName));
+                QFile::remove((QString(m_reportPath + "/" + dmpFileName)));
             }
         }
     }
