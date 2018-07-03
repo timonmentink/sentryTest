@@ -2,10 +2,13 @@ version: '{branch}-{build}'
 
 environment:
   matrix:
-    # Tip: sed -nre 's|.*Qt/.*/|    - QTDIR: &|p' | tr '/' '\' | sort -nt. -k1.20,1 -k2,2 -k3
-    - QTDIR: C:\Qt\5.10.1\msvc2013_64
-    - QTDIR: C:\Qt\5.10.1\msvc2015
-    - QTDIR: C:\Qt\5.10.1\msvc2015_64
+  - arch: x64
+    qt: 5.10.1
+    cc: VS2017
+    mode: release
+    QTDIR: C:\Qt\5.10.1\msvc2017_64
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+
 
 configuration:
   - debug
@@ -13,18 +16,15 @@ configuration:
 
 install:
   - git submodule update --init --recursive
+  - set vcarch=%arch%
+  - if "%arch%" == "x64" set vcarch=amd64
   - '%QTDIR%\bin\qtenv2.bat'
   - qmake -v
-  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
-  - if %QTDIR:msvc=%==%QTDIR% g++ --version
-  - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
-  - if %QTDIR:msvc=%==%QTDIR% %make% --version
-  - if not %QTDIR:msvc2013=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %ARCH%
-  - if not %QTDIR:msvc2015=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
-  - if not %QTDIR:msvc2017=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %ARCH%
-  - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
-  - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
-
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %vcarch%
+  - echo NUMBER_OF_PROCESSORS=%NUMBER_OF_PROCESSORS%
+  - echo PROCESSOR_IDENTIFIER=%PROCESSOR_IDENTIFIER%
+  - echo QTDIR=%QTDIR%
+  
 before_build:
   # Prepare the out-of-source build directory.
   - mkdir %APPVEYOR_BUILD_FOLDER%-build
